@@ -1,6 +1,9 @@
 import express from "express"
 
-const app = express();
+const app = express()
+
+app.use(express.json())
+
 const series = [
   {id: 1, "titulo": "The Nanny"},
   {id: 2, "titulo": "The 100"},
@@ -14,6 +17,11 @@ app.get('/', (req, res) => {
 
 app.get('/series', (req, res) => {
   res.status(200).json(series)
+})
+
+app.post('/series', (req, res) => {
+  series.push(req.body)
+  res.status(201).send('Série cadastrada com sucesso')
 })
 
 export default app
