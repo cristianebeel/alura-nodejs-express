@@ -35,6 +35,13 @@ app.put('/series/:id', (req, res) => {
   res.json(series)
 })
 
+app.delete('/series/:id', (req, res) => {
+  let {id} = req.params
+  let index = buscaSerie(id)
+  series.splice(index, 1)
+  res.send(`Série ${id} removida com sucesso`)
+})
+
 function buscaSerie(id){
   return series.findIndex(serie => serie.id == id)
 }
