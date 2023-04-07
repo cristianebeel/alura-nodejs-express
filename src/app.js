@@ -19,6 +19,11 @@ app.get('/series', (req, res) => {
   res.status(200).json(series)
 })
 
+app.get('/series/:id', (req, res) => {
+  let index = buscaSerie(req.params.id)
+  res.json(series[index])
+})
+
 app.post('/series', (req, res) => {
   series.push(req.body)
   res.status(201).send('Série cadastrada com sucesso')
