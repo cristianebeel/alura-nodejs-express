@@ -1,6 +1,7 @@
 import express from "express"
 import db from "./config/dbConnect.js"
 import series from "./models/Serie.js"
+import routes from "./routes/index.js"
 
 db.on("error", console.log.bind(console, 'Erro de conexão'))
 db.once("open", () => {
@@ -11,16 +12,14 @@ const app = express()
 
 app.use(express.json())
 
+routes(app)
+
 /* const series = [
   {id: 1, "titulo": "The Nanny"},
   {id: 2, "titulo": "The 100"},
   {id: 3, "titulo": "Suits"},
   {id:4, "titulo": "Hometown Cha Cha Cha"}
 ] */
-
-app.get('/', (req, res) => {
-  res.status(200).send('Media Manager')
-})
 
 app.get('/series/:id', (req, res) => {
   let index = buscaSerie(req.params.id)
