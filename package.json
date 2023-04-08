@@ -1,7 +1,7 @@
 {
-  "name": "media-manager-api",
+  "name": "alura-nodejs-express",
   "version": "1.0.0",
-  "description": "Gerenciador de mídias",
+  "description": "Alura - Curso de Node.js: API Rest com Express e MongoDB",
   "main": "index.js",
   "type": "module",
   "scripts": {

@@ -1,5 +1,6 @@
 import express from "express";
 import series from "./seriesRoutes.js"
+import networks from "./networksRoutes.js"
 
 const routes = (app) => {
   app.route('/').get((req, res) => {
@@ -8,7 +9,8 @@ const routes = (app) => {
 
   app.use(
     express.json(),
-    series
+    series,
+    networks
   )
 }
 
