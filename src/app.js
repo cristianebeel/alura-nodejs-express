@@ -22,10 +22,6 @@ app.get('/', (req, res) => {
   res.status(200).send('Media Manager')
 })
 
-app.get('/series', async (req, res) => {
-  res.status(200).send(await series.find())
-})
-
 app.get('/series/:id', (req, res) => {
   let index = buscaSerie(req.params.id)
   res.json(series[index])
