@@ -2,8 +2,12 @@ import series from '../models/Serie.js'
 
 class SerieController {
   static get = async (req, res) => {
-    let all = await series.find()
-    res.status(200).send(all)
+    try{
+      const all = await series.find()
+      res.status(200).send(all)
+    } catch(err) {
+      res.status(500).send({message: `Não foi possível carregar os registros. ${err.message}`})
+    }
   }
 
   static getById = async (req, res) => {
@@ -17,9 +21,8 @@ class SerieController {
     }
   }
 
-  static post = (req, res) => {
-    let serie = new series(req.body)
-
+  static post = async (req, res) => {
+    let serie = await new series(req.body)
     serie.save().then(() => {
       res.status(201).send(serie.toJSON())
     }).catch((err) => {
@@ -27,11 +30,12 @@ class SerieController {
     })
   }
 
-  static update = (req, res) => {
+  static update = async (req, res) => {
     const id = req.params.id
+    const serie = await series.findById(id)
 
-    series.findByIdAndUpdate(id, {$set: req.body}).then(() => {
-      res.status(200).send({message: 'Série atualizada com sucesso'})
+    await series.findByIdAndUpdate(id, {$set: req.body}).then(() => {
+      res.status(200).send({message: `Série ${serie.title} atualizada com sucesso`})
     }).catch((err) => {
       res.status(500). send({message: `Erro ao atualizar série. ${err.message}`})
     })
@@ -40,7 +44,6 @@ class SerieController {
   static delete = async (req, res) => {
     try {
       const id = req.params.id
-      
       await series.findByIdAndDelete(id)
       res.status(200).send({message: 'Série deletada com sucesso'})
     } catch (err) {
