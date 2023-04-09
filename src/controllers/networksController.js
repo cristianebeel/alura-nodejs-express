@@ -50,6 +50,10 @@ class NetworkController {
       res.status(500).send({message: `Erro ao deletar emissora. ${err.message}`})
     }
   }
+
+  static async getByName(name) {
+    return await networks.findOne({'name': name})
+  }
 }
 
 export default NetworkController

@@ -1,10 +1,15 @@
 import series from '../models/Serie.js'
+import NetworkController from './networksController.js'
 
 class SerieController {
+
   static get = async (req, res) => {
     try{
-      const all = await series.find()
-      res.status(200).send(all)
+     await series.find()
+        .populate('network')
+        .then((series) => {
+          res.status(200).json(series)
+        })
     } catch(err) {
       res.status(500).send({message: `Não foi possível carregar os registros. ${err.message}`})
     }
@@ -13,9 +18,13 @@ class SerieController {
   static getById = async (req, res) => {
     try {
       const id = req.params.id
-      const serie = await series.findById(id)
-
-      res.status(200).send(serie)
+      await series.findById(id)
+      .populate('network', 'name')
+      .then((series) => {
+        if(series != null){
+          res.status(200).send(series)
+        }
+      })
     } catch (err) {
       res.status(400).send({message: `ID não encontrado. ${err.message}`})
     }
@@ -46,8 +55,26 @@ class SerieController {
       const id = req.params.id
       await series.findByIdAndDelete(id)
       res.status(200).send({message: 'Série deletada com sucesso'})
-    } catch (err) {
+    } catch(err) {
       res.status(500).send({message: `Erro ao deletar série. ${err.message}`})
+    }
+  }
+
+  static getByNetwork = async (req, res) => {
+    try {
+      const networkName = req.query.network
+      const network = await NetworkController.getByName(networkName)
+  
+      if(!network) {
+        res.status(404).json({message: "Network not found"})
+      } else {
+        const s = await series.find({'network': network._id})
+        .populate('network')
+        
+        res.status(200).json(s)
+     } 
+    } catch(err) {
+      res.status(500).send({message: `Erro ao buscar emissora. ${err.message}`})
     }
   }
 }
