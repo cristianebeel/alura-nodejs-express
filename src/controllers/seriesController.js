@@ -3,17 +3,21 @@ import NetworkController from './networksController.js'
 
 class SerieController {
 
-  static get = async (req, res) => {
+  static async get(req, res) {
     try{
-     await series.find()
+      await series.find()
         .populate('network')
         .then((series) => {
           res.status(200).json(series)
         })
     } catch(err) {
-      res.status(500).send({message: `Não foi possível carregar os registros. ${err.message}`})
+      res.status(500).send({
+        message: `Não foi possível carregar os registros. ${err.message}`
+      })
     }
   }
+
+  
 
   static getById = async (req, res) => {
     try {
